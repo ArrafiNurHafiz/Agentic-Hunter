@@ -330,7 +330,18 @@ MCP is an adapter over the existing research engine — not a second scanner. Ac
 
 ## Commands
 
-### Core Workflow
+### Modular Assessment & Attack Pipeline
+
+| Command | What It Does |
+|:---|:---|
+| `bughunter attack <target> --dry-run` | Validates target, scope boundaries, and execution plan offline |
+| `bughunter attack <target>` | Executes the full modular assessment pipeline across phases |
+| `bughunter attack <target> --phase 1-3` | Slices execution to specific phases (e.g., Phase 1 to Phase 3) |
+| `bughunter attack status <session>` | Inspects session status, completed phases, and findings ledger |
+| `bughunter attack resume <session>` | Resumes an assessment session from the last successful checkpoint |
+| `bughunter retest <session>` | Differential retesting on findings with tamper-proof evidence comparison |
+
+### Core Workflow (Slash Commands)
 
 | Command | What It Does |
 |:---|:---|
