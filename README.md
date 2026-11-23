@@ -195,3 +195,39 @@ The `bughunter` CLI provides a unified, scriptable command-line interface:
 | `bughunter chain`   | `[c]` | Synthesize multi-vulnerability exploit chains for escalated impact. |
 | `bughunter chat`    | `[ask]` | Launch an interactive security assistant terminal shell. |
 | `bughunter mcp`     | `[doctor\|catalog]` | Inspect and run native Model Context Protocol (MCP) server endpoints. |
+
+---
+
+## Specialized Skills
+
+Agentic Hunter includes 14 curated domain skills covering both traditional web applications and cutting-edge decentralized systems:
+
+| Skill Domain | Directory | Primary Focus |
+|---|---|---|
+| **Bug Bounty Workflow** | `skills/bug-bounty/` | End-to-end testing methodology from recon through report authoring. |
+| **Hunting Methodology** | `skills/bb-methodology/` | 5-phase non-linear workflow, tool routing, and session discipline. |
+| **Web2 Reconnaissance** | `skills/web2-recon/` | Subdomain discovery, DNS enumeration, active probing, and URL crawling. |
+| **Web2 Vuln Classes** | `skills/web2-vuln-classes/` | 21 vulnerability classes with tested WAF bypass matrices. |
+| **Security Arsenal** | `skills/security-arsenal/` | Curated payloads, gf patterns, wordlist pointers, and validation rules. |
+| **Web3 Smart Contracts** | `skills/web3-audit/` | 10 DeFi bug classes, Foundry PoC generation, and reentrancy analysis. |
+| **Token & Meme Coin Audit** | `skills/meme-coin-audit/` | Rug pull indicators, mint authority checks, and liquidity pool drains. |
+| **Triage & Validation** | `skills/triage-validation/` | 7-Question Gate, CVSS 3.1 scoring, and pre-submission validation. |
+| **Report Writing** | `skills/report-writing/` | Platform-native templates for HackerOne, Bugcrowd, and Immunefi. |
+| **Mobile Pentesting** | `skills/mobile-pentest/` | Android/iOS runtime proxying, APK decompile, and WebView bridge flaws. |
+| **CI/CD Security** | `skills/cicd-security/` | GitHub Actions injection, secret harvesting, and runner poisoning. |
+| **GraphQL Pentesting** | `skills/graphql-audit/` | Introspection bypass, field suggestions, batching DoS, and IDOR. |
+| **MCP Server Audit** | `skills/mcp-server-audit/` | Model Context Protocol security, tool poisoning, and prompt injection. |
+| **Cloud Exploitation** | `skills/cloud-pentest/` | Post-compromise IAM enum, IMDS metadata theft, and bucket takeover. |
+
+---
+
+## External Tools & Arsenal Integration
+
+The engine coordinates a suite of integrated shell and Python tools located in `bughunter/tools/`:
+
+- **Lead Ledger Engine**: `lead_board.py` (persistent recon-to-lead ledger).
+- **Reconnaissance**: `recon_engine.sh`, `takeover_scanner.sh`, `cloud_recon.sh`.
+- **Parameter & Endpoint Discovery**: `param_discovery.sh`, `graphql_audit.sh`.
+- **WAF & Evasion**: `waf_encoder.py`, `waf_response_analyzer.py`, `bypass_403.sh`.
+- **Secrets & Token Scanning**: `secrets_hunter.sh`, `token_scanner.py`.
+- **Vulnerability Sweeps**: `vuln_scanner.sh`, `cve_scan.sh`, `eol_check.py`.
