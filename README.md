@@ -610,22 +610,6 @@ echo 'export CHAOS_API_KEY="your-key"' >> ~/.zshrc
 
 ---
 
-## Contributing
-
-PRs welcome. Most valuable:
-- New scanner modules or detection techniques
-- Payload additions to `skills/security-arsenal/SKILL.md`
-- Methodology improvements backed by paid reports
-- Platform support (YesWeHack · Synack · HackenProof)
-
-```bash
-git checkout -b feature/your-contribution
-git commit -m "feat: short description"
-git push origin feature/your-contribution
-```
-
----
-
 ## Used By
 
 <p align="center"><i>Teams and researchers running BugHunter in their workflow.</i></p>
