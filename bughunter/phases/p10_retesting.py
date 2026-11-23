@@ -174,18 +174,18 @@ def retest_session(session_id: str, manager: Optional[SessionManager] = None) ->
             "title": f.get("title", fid),
         }
         has_reg = any(r.get("status") in ("REGRESSION", "CRASH") for r in evs)
+        has_fixed = any(r.get("status") in ("RESOLVED", "FIXED", "PATCHED") for r in evs)
         has_still = any(r.get("status") in ("CONFIRMED", "STILL_PRESENT") for r in evs)
-        has_fixed = any(r.get("status") in ("RESOLVED", "FIXED") for r in evs)
 
         if has_reg:
             item["status"] = "Regression"
             regressions.append(item)
-        elif has_still:
-            item["status"] = "Still Present"
-            still_present.append(item)
         elif has_fixed:
             item["status"] = "Fixed"
             fixed.append(item)
+        elif has_still or f.get("status") == "CONFIRMED":
+            item["status"] = "Still Present"
+            still_present.append(item)
         else:
             item["status"] = "Inconclusive"
             item["rationale"] = "Insufficient counter-evidence to determine remediation status."
