@@ -219,13 +219,31 @@ def _exclusion_matches(hostname: str, pattern: str) -> bool:
 
 def _path_matches(url_path: str, pattern_path: str | None) -> bool:
     """Prefix match with a path-segment boundary (so /api does not match
-    /apixyz). A pattern with no path (None or "/") matches any path."""
+    /apixyz). A pattern with no path (None or "/") matches any path.
+
+    Dot-segments (..) and URL-encoded dot-segments (%2e%2e) are resolved
+    before matching to prevent path-traversal escapes beyond the allowed prefix.
+    """
     if not pattern_path or pattern_path == "/":
         return True
+    import posixpath
+    from urllib.parse import unquote
+
     up = url_path or "/"
+    prev = None
+    curr = up
+    while prev != curr:
+        prev = curr
+        curr = unquote(curr)
+    norm = posixpath.normpath(curr)
+    if not norm.startswith("/"):
+        norm = "/" + norm
+    if up.endswith("/") and not norm.endswith("/"):
+        norm += "/"
+
     if pattern_path.endswith("/"):
-        return up == pattern_path[:-1] or up.startswith(pattern_path)
-    return up == pattern_path or up.startswith(pattern_path + "/")
+        return norm == pattern_path[:-1] or norm.startswith(pattern_path)
+    return norm == pattern_path or norm.startswith(pattern_path + "/")
 
 
 def _parse_pattern(raw: str) -> dict | None:

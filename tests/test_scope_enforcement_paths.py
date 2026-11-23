@@ -19,10 +19,10 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 MCP = ROOT / "bughunter" / "mcp" / "bughunter-mcp"
-for p in (str(MCP), str(ROOT)):
-    if p not in sys.path:
-        sys.path.insert(0, p)
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(MCP))
 
+import adapters  # noqa: E402
 import tools.hunt as hunt
 from tools.scope_checker import ScopeChecker
 

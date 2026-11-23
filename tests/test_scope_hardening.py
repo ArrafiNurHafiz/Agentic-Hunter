@@ -348,3 +348,19 @@ class TestUnifiedHostParser:
         assert AutopilotGuard._extract_host("https://target.com:8443/x") == "target.com:8443"
         # Backslash trick yields no usable host (fail closed at parse).
         assert AutopilotGuard._extract_host("https://target.com\\@evil.com") == ""
+
+
+class TestPathTraversalScopeEscapePrevention:
+    def test_path_traversal_dot_dot_escapes_blocked(self):
+        sc = ScopeChecker(["target.com/api/"])
+        assert sc.is_in_scope("https://target.com/api/v1") is True
+        assert sc.is_in_scope("https://target.com/api/users") is True
+        # Dot-dot escape to /admin is out of scope
+        assert sc.is_in_scope("https://target.com/api/../admin") is False
+        assert sc.is_in_scope("https://target.com/api/v1/../../admin") is False
+
+    def test_path_traversal_url_encoded_escapes_blocked(self):
+        sc = ScopeChecker(["target.com/api/"])
+        assert sc.is_in_scope("https://target.com/api/%2e%2e/admin") is False
+        assert sc.is_in_scope("https://target.com/api/%252e%252e/admin") is False
+
