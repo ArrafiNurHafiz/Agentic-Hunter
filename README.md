@@ -25,13 +25,13 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Awarexone/Agentic-Bug-Hunter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="MIT License"></a>
+  <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.10+">
   <a href="https://pypi.org/project/agentic-bug-hunter/"><img src="https://img.shields.io/pypi/v/agentic-bug-hunter?style=flat-square&color=3775A9&logo=pypi&logoColor=white" alt="PyPI version"></a>
   <a href="https://pepy.tech/projects/agentic-bug-hunter"><img src="https://static.pepy.tech/personalized-badge/agentic-bug-hunter?period=total&units=international_system&left_color=black&right_color=green&left_text=downloads" alt="PyPI Downloads"></a>
   <a href="https://claude.ai/claude-code"><img src="https://img.shields.io/badge/Claude_Code-Plugin-D97706.svg?style=flat-square" alt="Claude Code Plugin"></a>
-  <a href="https://github.com/Awarexone/Agentic-Bug-Hunter/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/Awarexone/Agentic-Bug-Hunter/tests.yml?branch=main&style=flat-square&label=tests" alt="Tests"></a>
-  <a href="https://github.com/Awarexone/Agentic-Bug-Hunter/stargazers"><img src="https://img.shields.io/github/stars/Awarexone/Agentic-Bug-Hunter?style=flat-square&color=yellow" alt="GitHub Stars"></a>
+  <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/ArrafiNurHafiz/Agentic-Hunter/tests.yml?branch=main&style=flat-square&label=tests" alt="Tests"></a>
+  <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/stargazers"><img src="https://img.shields.io/github/stars/ArrafiNurHafiz/Agentic-Hunter?style=flat-square&color=yellow" alt="GitHub Stars"></a>
 </p>
 
 <p align="center">
@@ -145,8 +145,8 @@ Works as a [Claude Code](https://claude.ai/claude-code) plugin, or as a fully st
 Install once, use the `bughunter` command from any terminal on your machine:
 
 ```bash
-git clone https://github.com/Awarexone/Agentic-Bug-Hunter.git
-cd Agentic-Bug-Hunter
+git clone https://github.com/ArrafiNurHafiz/Agentic-Hunter.git
+cd Agentic-Hunter
 ./install.sh --agent standalone
 ```
 
@@ -168,10 +168,12 @@ also supports `claude`, `antigravity`, `opencode`, `pi`, `codex`, `agents`, and 
 bughunter help               # show every command
 bughunter setup              # choose your AI provider (Ollama is free + offline)
 bughunter login              # login with Google OAuth (Antigravity / Gemini AI Pro — no API key)
+bughunter attack target.com  # run modular 9-phase assessment pipeline (--dry-run supported)
 bughunter recon target.com   # map the attack surface
 bughunter hunt  target.com   # hunt for vulnerabilities
 bughunter validate "finding" # 7-Question Gate on your finding
 bughunter report             # write a submission-ready report
+bughunter retest <session>   # differential retesting on assessment session
 bughunter chat               # interactive AI hunting shell
 bughunter providers          # list all available AI providers
 bughunter models             # list models and show the selected one
@@ -181,11 +183,12 @@ bughunter r target.com       # short alias for recon
 bughunter v "finding"        # short alias for validate
 ```
 
-### Free AI Providers (auto-detected, free-first priority)
+### Free & Supported AI Providers (auto-detected, free-first priority)
 
 | Provider | Cost | Privacy | Speed | Get Started |
 |:---|:---|:---|:---|:---|
 | **Ollama** | 100% free · runs locally | Full - stays on your machine | Fast | `ollama pull qwen2.5:14b` |
+| **9Router** | Local / self-hosted gateway | Local network · OpenAI-compatible | Very fast | `bughunter setup --provider 9router` · `NINEROUTER_BASE_URL` |
 | **Antigravity / Gemini** | Included with Gemini AI Pro (Google OAuth — no API key) | Cloud | Fast | `bughunter login` → `gemini-4-argon-high` / `claude-opus-5-5-high` |
 | **Groq** | Free tier available | Cloud | Very fast | [console.groq.com](https://console.groq.com) → get API key |
 | **DeepSeek** | Very cheap (v4-flash / v4-pro) | Cloud | Fast | [platform.deepseek.com](https://platform.deepseek.com) |
@@ -197,7 +200,7 @@ bughunter v "finding"        # short alias for validate
 | **LiteLLM** | Uses your existing provider keys | Cloud / self-hosted proxy | Fast | [docs.litellm.ai](https://docs.litellm.ai) → one gateway for 100+ models |
 | **Requesty** | Pay-as-you-go | Cloud | Fast | [app.requesty.ai/api-keys](https://app.requesty.ai/api-keys) → get API key · [docs](https://docs.requesty.ai) |
 
-BugHunter auto-detects providers in this order: **Ollama → Groq → DeepSeek → … → OrcaRouter → OpenRouter → Claude → OpenAI**. LiteLLM is opt-in (selected explicitly or when `LITELLM_API_KEY` is set) so it never preempts a provider you already configured. Requesty is opt-in the same way (selected explicitly or when `REQUESTY_API_KEY` is set); set `REQUESTY_BASE_URL=https://router.eu.requesty.ai/v1` to route through the EU region.
+BugHunter auto-detects providers in this order: **Ollama → 9Router → Groq → DeepSeek → … → OrcaRouter → OpenRouter → Claude → OpenAI**. LiteLLM is opt-in (selected explicitly or when `LITELLM_API_KEY` is set) so it never preempts a provider you already configured. Requesty is opt-in the same way (selected explicitly or when `REQUESTY_API_KEY` is set); set `REQUESTY_BASE_URL=https://router.eu.requesty.ai/v1` to route through the EU region.
 
 Switch providers or choose an installed Ollama model anytime: `bughunter setup`.
 The setup can also be fully non-interactive:
@@ -220,8 +223,8 @@ curl -fsSL https://ollama.ai/install.sh | sh
 ollama pull qwen2.5:14b          # ~9 GB, one-time download
 
 # 2. Install BugHunter
-git clone https://github.com/Awarexone/Agentic-Bug-Hunter.git
-cd Agentic-Bug-Hunter
+git clone https://github.com/ArrafiNurHafiz/Agentic-Hunter.git
+cd Agentic-Hunter
 ./install.sh --agent standalone   # creates system-wide 'bughunter' command
 
 # 3. Hunt
@@ -259,10 +262,11 @@ bughunter hunt  target.com
 **Option A - standalone (no subscription, works for everyone)**
 
 ```bash
-git clone https://github.com/Awarexone/Agentic-Bug-Hunter.git
-cd Agentic-Bug-Hunter
+git clone https://github.com/ArrafiNurHafiz/Agentic-Hunter.git
+cd Agentic-Hunter
 ./install.sh --agent standalone   # creates system-wide 'bughunter' command
 bughunter setup                   # pick a free AI provider
+bughunter attack target.com --dry-run
 bughunter recon target.com
 bughunter hunt  target.com
 bughunter validate "my finding"
@@ -272,8 +276,8 @@ bughunter report
 **Option B - Claude Code plugin** *(requires Claude Code)*
 
 ```bash
-git clone https://github.com/Awarexone/Agentic-Bug-Hunter.git
-cd Agentic-Bug-Hunter
+git clone https://github.com/ArrafiNurHafiz/Agentic-Hunter.git
+cd Agentic-Hunter
 chmod +x install_tools.sh && ./install_tools.sh   # subfinder · httpx · nuclei · katana · ffuf
 chmod +x install.sh      && ./install.sh          # skills + commands → ~/.claude/
 ```
@@ -291,7 +295,7 @@ claude
 Open your terminal, run `claude`, then paste:
 
 ```text
-Install the Claude Bug Bounty toolkit from https://github.com/Awarexone/Agentic-Bug-Hunter
+Install the Claude Bug Bounty toolkit from https://github.com/ArrafiNurHafiz/Agentic-Hunter
 into ~/tools/. Clone the repo, run ./install_tools.sh then ./install.sh.
 Verify /recon /hunt /validate /report are available.
 ```
@@ -300,10 +304,10 @@ Verify /recon /hunt /validate /report are available.
 
 ## MCP
 
-Use Agentic-Bug-Hunter from AI agents (Cursor, Claude Code, Codex, OpenCode).
+Use Agentic-Hunter from AI agents (Cursor, Claude Code, Codex, OpenCode).
 
 ```text
-AI Agent → Agentic-Bug-Hunter MCP → Scope → Recon → Hunt → Validate → Report
+AI Agent → Agentic-Hunter MCP → Scope → Recon → Hunt → Validate → Report
 ```
 
 ```bash
@@ -313,7 +317,7 @@ bughunter mcp doctor
 bughunter mcp serve
 ```
 
-MCP is an adapter over the existing research engine — not a second scanner. Active tools require scope and explicit approval. See [docs/mcp.md](https://github.com/awarexone/Agentic-Bug-Hunter/blob/main/docs/mcp.md).
+MCP is an adapter over the existing research engine — not a second scanner. Active tools require scope and explicit approval. See [docs/mcp.md](docs/mcp.md).
 
 ---
 
@@ -481,9 +485,24 @@ Every tool in the pipeline is gated on whether it's installed - missing tools ar
 <br>
 
 ```
-Agentic-Bug-Hunter/
+Agentic-Hunter/
 │
-├── skills/                    # AI knowledge bases - loaded as /skill-name
+├── bughunter/                 # Python package & modular hunting engine
+│   ├── core/                  # Session, state machine, scope, executor & policy engine
+│   ├── phases/                # 9-phase assessment pipeline (p01_scope → p09_reporting)
+│   ├── cli/                   # Attack command & assessment CLI registration
+│   ├── adapters/              # External tool adapters (subfinder, httpx, ffuf, katana, nuclei, nmap)
+│   ├── harness/               # Planner, payload engine, safety gate, recovery, verifier, reporter
+│   ├── memory/                # Cross-session hunt memory (pattern DB, audit log, rotation)
+│   ├── tools/                 # Python + shell scanner pipeline (~50 tools)
+│   ├── wordlists/             # Curated discovery & fuzzing wordlists
+│   ├── mcp/                   # MCP adapters (bughunter-mcp, Burp, Caido, HackerOne)
+│   ├── brain.py               # Multi-provider LLM gateway (9Router, Antigravity, Ollama, Groq, etc.)
+│   ├── agent.py               # ReAct hunting agent & autonomous loop
+│   ├── engine.py              # Standalone CLI entry point (`bughunter`)
+│   └── serve.py               # Local mock and demo server
+│
+├── skills/                    # AI knowledge bases & methodology (loaded as /skill-name)
 │   ├── bug-bounty/            # Master workflow - all vuln classes, LLM testing, chains
 │   ├── bb-methodology/        # Hunting mindset · 5-phase workflow · session discipline
 │   ├── web2-recon/            # Subdomain enum · live host discovery · URL crawl
@@ -497,51 +516,19 @@ Agentic-Bug-Hunter/
 │   └── client-reverse/        # Request-signing / anti-bot token reversal
 │
 ├── commands/                  # 33 slash commands (/recon /hunt /validate /report …)
-├── agents/                    # 9 specialized AI agents (recon, validator, reporter …)
-│
-├── tools/                     # Python + shell scanner pipeline (~35 tools)
-│   ├── hunt.py                # Master orchestrator
-│   ├── recon_engine.sh        # Subdomain + URL discovery
-│   ├── vuln_scanner.sh        # XSS · SQLi · SSRF · SSTI probe pipeline
-│   ├── validate.py            # 4-gate finding validator with identity checks
-│   └── …                      # 30+ more scanners - see bughunter/tools/README.md
-│
-├── memory/                    # Cross-session hunt memory (pattern DB · audit log)
 ├── rules/                     # Always-active hunting + reporting rules
-├── tests/                     # Regression test suite (pytest)
-├── web3/                      # 13-chapter smart contract audit guide
-├── mcp/                       # MCP — native BugHunter server + Burp · Caido · HackerOne
-├── wordlists/                 # Curated wordlists + SecLists / PayloadsAllTheThings refs
-├── scripts/                   # Dork runner · full hunt pipeline
-├── hooks/                     # Claude Code hook configuration
-├── site/                      # bughunter.fun landing page
-├── demo/                      # Local vulnerable target for tutorial recordings
-│
-├── docs/                      # Extended documentation
-│   ├── advanced-techniques.md # Exploitation techniques + chaining strategies
-│   ├── auth-sessions.md       # Auth header management guide
-│   ├── payloads.md            # Payload reference for common vuln classes
-│   ├── smart-contract-audit.md# Smart contract audit deep-dive
-│   ├── TUTORIAL.md            # A→Z video tutorial walkthrough
-│   └── TODOS.md               # Open improvement items
-│
-├── .github/                   # GitHub community health files
-│   ├── CONTRIBUTING.md        # How to contribute
-│   ├── CODE_OF_CONDUCT.md     # Community standards
-│   ├── SECURITY.md            # Vulnerability reporting policy
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── ISSUE_TEMPLATE/        # Bug report · Feature request · False positive
-│
-├── engine.py                  # Standalone CLI - 'bughunter' command, no subscription needed
-├── brain.py                   # Multi-provider LLM layer (Ollama · Groq · DeepSeek · Claude · OpenAI)
-├── agent.py                   # LangGraph-style ReAct hunting agent
-├── install.sh                 # Install skills + commands → ~/.claude/ (or standalone mode)
-├── install_tools.sh           # Install subfinder · httpx · nuclei · katana · ffuf …
-├── uninstall.sh               # Remove skills + commands from ~/.claude/
-├── uninstall_tools.sh         # Remove external scanning tools
-├── serve.py                   # Launch local demo target (python3 serve.py)
-├── config.example.json        # Auth session config template
+├── tests/                     # Test suites (unit, integration, benchmarks, dry-runs)
+├── web3/                      # Smart contract audit guide & DeFi methodology
+├── netflix-privacy-analysis/  # Privacy hardening & opt-out guide generator
+├── scripts/                   # Dork runner, full hunt runner, testing helpers
+├── docs/                      # Extended architecture specs & vulnerability notes
+├── install.sh                 # Multi-harness installer (standalone, claude, antigravity, opencode, pi)
+├── install_tools.sh           # External scanner installer (subfinder, httpx, nuclei, ffuf, etc.)
+├── uninstall.sh               # Uninstaller script
+├── uninstall_tools.sh         # External scanner uninstaller
+├── pyproject.toml             # Python packaging configuration
 ├── requirements.txt           # Python dependencies
+├── config.example.json        # Provider & session config template
 ├── CLAUDE.md                  # Claude Code plugin manifest (auto-loaded)
 ├── AGENTS.md                  # Multi-harness plugin guide (OpenCode · Codex · Pi)
 ├── SKILL.md                   # Master skill shortcut (auto-loaded by agent harnesses)
@@ -867,32 +854,23 @@ git push origin feature/your-contribution
 </table>
 
 <p align="center">
-  <a href="https://github.com/Awarexone/Agentic-Bug-Hunter/graphs/contributors"><img src="https://img.shields.io/github/contributors/Awarexone/Agentic-Bug-Hunter?style=for-the-badge&color=7F55FF&label=contributors" alt="Contributors"/></a>
+  <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/graphs/contributors"><img src="https://img.shields.io/github/contributors/ArrafiNurHafiz/Agentic-Hunter?style=for-the-badge&color=7F55FF&label=contributors" alt="Contributors"/></a>
   <a href="#contributing"><img src="https://img.shields.io/badge/+-Add_your_name-24292F?style=for-the-badge" alt="Contribute"/></a>
 </p>
 ---
 
 <p align="center">
-  <a href="https://github.com/shuvonsec">GitHub</a>
+  <a href="https://github.com/ArrafiNurHafiz">GitHub</a>
   ·
-  <a href="https://x.com/awarexone">Twitter</a>
+  <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter">Agentic-Hunter</a>
   ·
-  <a href="mailto:hello@awarexone.com">hello@awarexone.com</a> · <a href="mailto:shuvon@awarexone.com">shuvon@awarexone.com</a><br>
+  <a href="https://github.com/awarexone">Upstream (AwareXone)</a><br>
   <b>Built by bug hunters, for bug hunters.</b><br>
   <sub>MIT License · For authorized security testing only. Always test within an approved bug bounty program scope.</sub>
 </p>
 
 <p align="center">
-  <a href="https://awarexone.com">
-    <img src="https://raw.githubusercontent.com/awarexone/Agentic-Bug-Hunter/main/assets/awarexone-logo.webp" alt="AwareXone" width="56"/>
+  <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter">
+    <img src="assets/banner.png" alt="Agentic Hunter" width="180"/>
   </a>
-  <br/>
-  <sub>Powered by <a href="https://awarexone.com"><b>AwareXone.com</b></a></sub>
-  <br/>
-  <sub>
-    <a href="https://awarexone.com">Website</a> ·
-    <a href="https://x.com/awarexone">X / Twitter</a> ·
-    <a href="https://github.com/Awarexone">GitHub</a>
-  </sub>
 </p>
-# Agentic-Hunter
