@@ -31,17 +31,7 @@
 </p>
 
 <p align="center">
-  Built and maintained by <b>AwareXone</b> · <a href="https://www.awarexone.com">Website</a> · <a href="https://x.com/shuvonsecc">X</a> · <a href="https://github.com/Awarexone">GitHub</a>
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/awarexone/Agentic-Bug-Hunter/main/assets/socialsafe-blurb.png" alt="SocialSafe by AwareXone provides case review and assistance for hacked, disabled, locked, restricted, and inaccessible social media accounts in Malaysia and worldwide by remote review. Assistance is best-effort, and final decisions remain with the platform." width="720"/>
-</p>
-
-<p align="center">
-  <a href="https://www.awarexone.com/all-types-of-social-media-problem-solutions#case-review">
-    <img src="https://raw.githubusercontent.com/awarexone/Agentic-Bug-Hunter/main/assets/apply-case-review-btn.png" alt="Apply for Case Review" height="48"/>
-  </a>
+  Maintained by <b><a href="https://github.com/ArrafiNurHafiz">Arrafi Nur Hafiz</a></b> · Built on open security research by <b><a href="https://github.com/Awarexone">AwareXone</a></b> &amp; Community
 </p>
 
 ---
