@@ -39,14 +39,17 @@
 ## Get started (30 seconds)
 
 ```bash
-uv tool install agentic-bug-hunter   # install the CLI (or: pipx install agentic-bug-hunter)
-bughunter setup                      # connect a free AI provider
+git clone https://github.com/ArrafiNurHafiz/Agentic-Hunter.git
+cd Agentic-Hunter
+./install.sh --agent standalone   # installs system-wide 'bughunter' command
+bughunter setup                   # connect free AI provider (Ollama / 9Router / Groq / Gemini)
 ```
 
-Then hunt — straight from your terminal:
+Then assess or hunt — straight from your terminal:
 
 ```bash
-bughunter hunt target.com            # recon → find → validate → report
+bughunter attack target.com --dry-run  # validate assessment plan & scope boundaries
+bughunter hunt target.com              # full automated pipeline: recon → find → validate → report
 ```
 
 …or drive it from inside Claude Code:
