@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/awarexone/Agentic-Bug-Hunter/main/assets/banner.png" alt="Agentic Bug Hunter - by AwareXone - AI-powered bug bounty reconnaissance and vulnerability discovery" width="100%"/>
+  <img src="assets/banner.png" alt="Agentic Hunter — AI-powered bug bounty reconnaissance and vulnerability discovery" width="100%"/>
 </p>
 
 <p align="center">
@@ -17,9 +17,7 @@
   ·
   <a href="#what-it-finds">What It Finds</a>
   ·
-  <a href="#more-from-awarexone">AXguard</a>
-  ·
-  <a href="#support-this-project">Support</a>
+  <a href="#mcp">MCP</a>
   ·
   <a href="FAQ.md">FAQ</a>
 </p>
@@ -27,15 +25,9 @@
 <p align="center">
   <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.10+">
-  <a href="https://pypi.org/project/agentic-bug-hunter/"><img src="https://img.shields.io/pypi/v/agentic-bug-hunter?style=flat-square&color=3775A9&logo=pypi&logoColor=white" alt="PyPI version"></a>
-  <a href="https://pepy.tech/projects/agentic-bug-hunter"><img src="https://static.pepy.tech/personalized-badge/agentic-bug-hunter?period=total&units=international_system&left_color=black&right_color=green&left_text=downloads" alt="PyPI Downloads"></a>
-  <a href="https://claude.ai/claude-code"><img src="https://img.shields.io/badge/Claude_Code-Plugin-D97706.svg?style=flat-square" alt="Claude Code Plugin"></a>
+  <img src="https://img.shields.io/badge/Status-Active-brightgreen.svg?style=flat-square" alt="Status">
   <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/ArrafiNurHafiz/Agentic-Hunter/tests.yml?branch=main&style=flat-square&label=tests" alt="Tests"></a>
   <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/stargazers"><img src="https://img.shields.io/github/stars/ArrafiNurHafiz/Agentic-Hunter?style=flat-square&color=yellow" alt="GitHub Stars"></a>
-</p>
-
-<p align="center">
-  <a href="https://trendshift.io/repositories/23808?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-23808" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/23808" alt="Awarexone%2FAgentic-Bug-Hunter | Trendshift" width="250" height="55"/></a>
 </p>
 
 <p align="center">
