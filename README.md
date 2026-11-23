@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Agentic Hunter — AI-powered bug bounty reconnaissance and vulnerability discovery" width="100%"/>
+  <img src="https://raw.githubusercontent.com/ArrafiNurHafiz/Agentic-Hunter/main/assets/banner.png" alt="Agentic Hunter" width="100%"/>
 </p>
 
 <p align="center">
