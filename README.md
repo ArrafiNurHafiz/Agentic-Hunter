@@ -31,7 +31,7 @@
 <p align="center">
   <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.10+">
-  <img src="https://img.shields.io/badge/Test%20Suite-1%2C227%20Passed%20(100%25)-brightgreen.svg?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/Test%20Suite-1%2C244%20Passed%20(100%25)-brightgreen.svg?style=flat-square" alt="Tests">
   <img src="https://img.shields.io/badge/Status-Production--Ready-success.svg?style=flat-square" alt="Status">
   <a href="https://github.com/ArrafiNurHafiz/Agentic-Hunter/stargazers"><img src="https://img.shields.io/github/stars/ArrafiNurHafiz/Agentic-Hunter?style=flat-square&color=yellow" alt="GitHub Stars"></a>
 </p>
@@ -272,7 +272,7 @@ Every core module and security gate in Agentic Hunter is covered by automated un
 uv run --with pytest pytest
 ```
 
-### Verified Test Suite Breakdown (1,227 Tests Passing)
+### Verified Test Suite Breakdown (1,244 Tests Passing)
 - **Session Artifact Integrity**: Atomic rollback, directory-traversal prevention, and SHA-256 digest verification (`test_session_artifacts_integrity.py`).
 - **Verified Evidence Provenance**: Rejection of unconfirmed findings and cryptographic hash anchoring (`test_evidence_provenance.py`, `test_verified_reporting.py`).
 - **Differential Snapshot Retesting**: Historical immutability, regression detection, and counter-evidence validation (`test_differential_snapshot_comparison.py`).
@@ -295,7 +295,7 @@ Agentic-Hunter/
 ├── skills/                      # 14 specialized bug bounty domain skills
 ├── rules/                       # Hunting discipline and report quality rules
 ├── docs/                        # Architecture status, design records, and checkpoints
-├── tests/                       # Complete pytest suite (1,227 tests)
+├── tests/                       # Complete pytest suite (1,244 tests)
 ├── assets/                      # Visual branding and banner graphic
 ├── install.sh                   # Multi-harness installer script
 └── pyproject.toml               # Python package configuration and dependencies
