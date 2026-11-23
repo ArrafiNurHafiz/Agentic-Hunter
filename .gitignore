@@ -58,4 +58,3 @@ build/
 .git_backup_awarexone/
 .pytest_cache/
 
-tests/test_defensive_harness_remediation.py
