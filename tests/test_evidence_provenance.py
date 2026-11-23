@@ -28,6 +28,19 @@ def test_chain_verifies_and_survives_reopen(tmp_path):
     assert {r["evidence_id"] for r in again.read_all()} == {a["evidence_id"], b["evidence_id"]}
 
 
+def test_append_refuses_truncated_chain_without_changing_anchor(tmp_path):
+    store = _store(tmp_path)
+    store.capture(kind="first")
+    store.capture(kind="second")
+    store.path.write_text(store.path.read_text().splitlines()[0] + "\n")
+    before_log = store.path.read_bytes()
+    before_head = store.head_path.read_bytes()
+    with pytest.raises(EvidenceError):
+        store.capture(kind="third")
+    assert store.path.read_bytes() == before_log
+    assert store.head_path.read_bytes() == before_head
+
+
 def test_scope_snapshot_is_not_rewritten(tmp_path):
     store = _store(tmp_path)
     scope = {"decision": "allow", "matched_rule": "*.example.com", "rules": ["*.example.com"]}

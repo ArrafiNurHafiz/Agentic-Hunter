@@ -866,6 +866,28 @@ def cmd_report(args):
         warn("No report output — ensure findings directory has data")
 
 
+def cmd_retest(args):
+    """Differential retesting on a previous assessment session."""
+    session_id = getattr(args, "session_id", None)
+    if not session_id:
+        raise SystemExit("retest: session_id is required")
+    from bughunter.core.session import SessionManager
+    from bughunter.harness.orchestrator import HarnessOrchestrator
+    try:
+        manager = SessionManager()
+        state = manager.load(session_id)
+        orch = HarnessOrchestrator(
+            session_id=session_id,
+            target=state["target"],
+            session_manager=manager,
+            dry_run=getattr(args, "dry_run", False),
+        )
+        res = orch.retest()
+        print(json.dumps(res, indent=2))
+    except Exception as e:
+        raise SystemExit(f"retest error: {e}")
+
+
 def cmd_chain(args):
     """Build A->B->C exploit chain."""
     findings_dir = getattr(args, "findings_dir", "") or ""
@@ -1116,6 +1138,10 @@ def main():
         help="serve (stdio MCP), doctor, or tools",
     )
 
+    p_retest = sub.add_parser("retest", help="Differential retesting on a previous assessment session")
+    p_retest.add_argument("session_id", help="Session ID to retest")
+    p_retest.add_argument("--dry-run", action="store_true", help="Retest in dry-run mode")
+
     args = parser.parse_args(argv)
 
     # Apply provider override
@@ -1133,12 +1159,13 @@ def main():
         if not os.environ.get(env_var) and cfg.get(env_var):
             os.environ[env_var] = cfg[env_var]
 
-    quiet_cmds = {"status", "providers", "models", "mcp", "login", "auth", "attack", None}
+    quiet_cmds = {"status", "providers", "models", "mcp", "login", "auth", "attack", "retest", None}
     if not getattr(args, "no_banner", False) and args.command not in quiet_cmds:
         _print_banner()
 
     dispatch = {
         "attack":    run_attack,
+        "retest":    cmd_retest,
         "setup":     cmd_setup,
         "login":     cmd_login,
         "auth":      cmd_login,

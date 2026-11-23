@@ -23,12 +23,53 @@ def run(args):
             if not args.session_id or args.dry_run or args.scope or args.phase:
                 raise ValueError('usage: bughunter attack status <session_id>')
             result = SessionManager().load(args.session_id)
-        elif args.target == 'resume' or not args.dry_run:
-            raise ValueError('assessment execution is unavailable; use --dry-run to validate a plan')
+        elif args.target == 'retest':
+            if not args.session_id:
+                raise ValueError('usage: bughunter attack retest <session_id>')
+            manager = SessionManager()
+            state = manager.load(args.session_id)
+            from bughunter.harness.orchestrator import HarnessOrchestrator
+            orch = HarnessOrchestrator(
+                session_id=args.session_id,
+                target=state['target'],
+                session_manager=manager,
+                dry_run=args.dry_run,
+            )
+            result = orch.retest()
+        elif args.target == 'resume':
+            if not args.session_id:
+                raise ValueError('usage: bughunter attack resume <session_id>')
+            manager = SessionManager()
+            state = manager.load(args.session_id)
+            from bughunter.harness.orchestrator import HarnessOrchestrator
+            orch = HarnessOrchestrator(
+                session_id=args.session_id,
+                target=state['target'],
+                session_manager=manager,
+                dry_run=args.dry_run,
+            )
+            result = orch.run()
         elif args.session_id:
             raise ValueError('unexpected second argument after target')
-        else:
+        elif args.dry_run:
             result = _plan(args)
+        else:
+            manager = SessionManager()
+            state = manager.create(args.target)
+            from bughunter.harness.orchestrator import HarnessOrchestrator
+            from bughunter.phases.p01_scope import check_target, load_scope
+            scope = load_scope(args.scope) if args.scope is not None else None
+            check_target(args.target, scope)
+            orch = HarnessOrchestrator(
+                session_id=state['session_id'],
+                target=args.target,
+                scope=scope,
+                profile=args.profile,
+                phase_filter=args.phase,
+                session_manager=manager,
+                dry_run=False,
+            )
+            result = orch.run()
     except (ValueError, OSError) as error:
         raise SystemExit(f'attack: {error}') from None
     print(json.dumps(result, indent=2))

@@ -118,6 +118,9 @@ class EvidenceStore:
         after the bad line is deleted.
         """
         lines = self._read_lines()
+        verdict = self._verify_lines(lines)
+        if not verdict["ok"]:
+            raise EvidenceError("evidence chain integrity check failed; refusing to append")
         if not lines:
             return GENESIS_HASH, 0
         try:
