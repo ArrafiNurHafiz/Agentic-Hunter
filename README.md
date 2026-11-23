@@ -96,3 +96,102 @@ flowchart TD
    - Authorization headers, bearer tokens, API keys, and sensitive target credentials are automatically sanitized (`redact_obj`) prior to reporting or exporting.
 4. **Deterministic Retesting Matrix**:
    - Retesting strictly refuses to mark a finding as *Fixed* solely due to an absent observation. Fixed status requires verified counter-evidence (e.g. valid input rejection with HTTP 400/422).
+
+---
+
+## Quickstart
+
+Get up and running in under a minute with Python 3.10+ and [`uv`](https://github.com/astral-sh/uv):
+
+```bash
+# Clone the repository
+git clone https://github.com/ArrafiNurHafiz/Agentic-Hunter.git
+cd Agentic-Hunter
+
+# Install dependencies and sync virtual environment
+uv sync
+
+# Configure your preferred AI model (Ollama, 9Router, Google, Groq, etc.)
+uv run bughunter setup
+
+# Run your first reconnaissance or surface analysis
+uv run bughunter recon example.com
+```
+
+---
+
+## Supported AI Providers
+
+Agentic Hunter natively supports diverse model runtimes with zero lock-in. Switch providers at any time using `bughunter setup` or `--provider <name>`.
+
+### 1. Free & 100% Offline (Ollama)
+No API keys or cloud subscriptions required:
+```bash
+# 1. Install Ollama and pull your preferred model
+curl -fsSL https://ollama.ai/install.sh | sh
+ollama pull qwen2.5:14b
+
+# 2. Select Ollama in BugHunter
+bughunter setup   # Select 'ollama' -> qwen2.5:14b
+bughunter recon target.com
+```
+
+### 2. Local 9Router Gateway
+Connect through local OpenAI-compatible routing gateways with full tool calling:
+```bash
+# Connect to 9Router on default port 20128
+bughunter setup   # Select '9router' -> http://127.0.0.1:20128/v1
+bughunter attack target.com --dry-run
+```
+
+### 3. Google Gemini / Antigravity OAuth (Zero-Key Cloud)
+Authenticate directly through your browser using Google OAuth loopback:
+```bash
+bughunter login   # Opens browser for OAuth consent
+bughunter hunt target.com
+```
+
+### 4. Cloud API Providers
+Export your API key for lightning-fast inference:
+```bash
+# Groq (Ultra-fast free tier)
+export GROQ_API_KEY="gsk_..."
+
+# DeepSeek (Cost-effective reasoning)
+export DEEPSEEK_API_KEY="sk-..."
+
+# Anthropic Claude
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# OpenAI
+export OPENAI_API_KEY="sk-..."
+```
+
+---
+
+## CLI Commands Reference
+
+The `bughunter` CLI provides a unified, scriptable command-line interface:
+
+### Configuration & Authentication
+| Command | Arguments | Description |
+|---|---|---|
+| `bughunter setup` | `[init]` | Interactively configure and persist provider, endpoint, and model preferences. |
+| `bughunter login` | `[auth]` | Authenticate using Google OAuth loopback for Gemini Pro models. |
+| `bughunter providers` | `[p]` | Display all supported providers and their current API key / connectivity status. |
+| `bughunter models` | `[m]` | List available models for the currently active provider. |
+| `bughunter status` | `[s]` | Show active assessment status, memory state, and session metrics. |
+
+### Assessment & Execution Pipeline
+| Command | Arguments | Description |
+|---|---|---|
+| `bughunter attack` | `<target> [--dry-run] [--scope <file>] [--profile passive\|active] [--phase 1-3]` | Run modular assessment pipeline with strict scope validation and dry-run safety gates. |
+| `bughunter retest` | `<session_id> [--dry-run]` | Perform differential snapshot retesting against baseline session evidence. |
+| `bughunter recon` | `<target> [r]` | Execute subdomain enumeration, DNS resolution, and AI surface ranking. |
+| `bughunter hunt` | `<target> [h]` | Launch guided multi-phase bug bounty hunting pipeline. |
+| `bughunter validate`| `<finding> [v]` | Run the 7-Question Gate to verify vulnerability reproducibility and impact. |
+| `bughunter triage`  | `<finding> [t]` | Fast-path triage validation for incoming findings. |
+| `bughunter report`  | `<session_id> [rep]` | Generate sanitized Markdown / JSON reports with verified evidence provenance. |
+| `bughunter chain`   | `[c]` | Synthesize multi-vulnerability exploit chains for escalated impact. |
+| `bughunter chat`    | `[ask]` | Launch an interactive security assistant terminal shell. |
+| `bughunter mcp`     | `[doctor\|catalog]` | Inspect and run native Model Context Protocol (MCP) server endpoints. |
