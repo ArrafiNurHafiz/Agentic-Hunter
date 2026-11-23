@@ -200,7 +200,7 @@ For a one-off override, put the option before the command:
 bughunter --provider ollama --model qwen3:14b hunt target.com
 ```
 
-### Zero-cost fully offline setup
+### Zero-cost fully offline setup (Ollama)
 
 ```bash
 # 1. Install Ollama (runs AI locally, no internet needed after download)
@@ -215,6 +215,28 @@ cd Agentic-Hunter
 # 3. Hunt
 bughunter setup       # choose Ollama, then choose one of its installed models
 bughunter recon target.com
+```
+
+### 9Router setup (OpenAI-compatible local / network gateway)
+
+```bash
+# 1. Run or connect to 9Router gateway (default: port 20128)
+export NINEROUTER_BASE_URL="http://localhost:20128/v1"
+
+# 2. Setup BugHunter to use 9Router with tool calling
+bughunter setup --provider 9router --model auto
+
+# 3. Assess target
+bughunter attack target.com --dry-run
+```
+
+### Google Antigravity / Gemini AI OAuth setup
+
+```bash
+# Authenticate via browser loopback OAuth (no API key required)
+bughunter login
+bughunter status
+bughunter hunt target.com
 ```
 
 ### Groq setup (free cloud, fastest option)
