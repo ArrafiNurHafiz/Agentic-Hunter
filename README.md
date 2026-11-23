@@ -610,22 +610,6 @@ echo 'export CHAOS_API_KEY="your-key"' >> ~/.zshrc
 
 ---
 
-## Rules
-
-Seven rules run every session, no exceptions:
-
-| # | Rule | Why |
-|:-:|:---|:---|
-| 1 | **Read full scope first** | Only test what the program authorizes |
-| 2 | **Real bugs only** | "Can an attacker do this RIGHT NOW?" - if no, stop |
-| 3 | **Kill weak findings** | A 30-second check saves hours of wasted reporting |
-| 4 | **Never go out of scope** | One wrong request can get you banned |
-| 5 | **5-minute rule** | No progress after 5 minutes? Move on |
-| 6 | **Validate before report** | `/validate` before spending 30 minutes writing |
-| 7 | **Impact first** | Test the bugs with the worst consequences first |
-
----
-
 ## Contributing
 
 PRs welcome. Most valuable:
