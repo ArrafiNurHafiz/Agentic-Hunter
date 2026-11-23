@@ -31,7 +31,7 @@
 </p>
 
 <p align="center">
-  Maintained by <b><a href="https://github.com/ArrafiNurHafiz">Arrafi Nur Hafiz</a></b> · Built on open security research by <b><a href="https://github.com/Awarexone">AwareXone</a></b> &amp; Community
+  Maintained by <b><a href="https://github.com/ArrafiNurHafiz">Arrafi Nur Hafiz</a></b>
 </p>
 
 ---
