@@ -231,3 +231,85 @@ The engine coordinates a suite of integrated shell and Python tools located in `
 - **WAF & Evasion**: `waf_encoder.py`, `waf_response_analyzer.py`, `bypass_403.sh`.
 - **Secrets & Token Scanning**: `secrets_hunter.sh`, `token_scanner.py`.
 - **Vulnerability Sweeps**: `vuln_scanner.sh`, `cve_scan.sh`, `eol_check.py`.
+
+---
+
+## Multi-Harness Agent Installation
+
+In addition to running as a standalone Python CLI, Agentic Hunter can be deployed directly into your preferred AI agent environment using `install.sh`:
+
+```bash
+# Standalone terminal engine
+./install.sh --agent standalone
+
+# Google Antigravity / Gemini CLI (~/.gemini/config)
+./install.sh --agent antigravity
+
+# Anthropic Claude Code (~/.claude)
+./install.sh --agent claude
+
+# OpenCode (~/.config/opencode)
+./install.sh --agent opencode
+
+# Pi Agent (~/.pi/agent)
+./install.sh --agent pi
+
+# Codex (~/.codex)
+./install.sh --agent codex
+
+# Install across all supported harnesses simultaneously
+./install.sh --agent all
+```
+
+---
+
+## Verification & Testing
+
+Every core module and security gate in Agentic Hunter is covered by automated unit and integration tests:
+
+```bash
+# Run the complete test suite
+uv run --with pytest pytest
+```
+
+### Verified Test Suite Breakdown (1,227 Tests Passing)
+- **Session Artifact Integrity**: Atomic rollback, directory-traversal prevention, and SHA-256 digest verification (`test_session_artifacts_integrity.py`).
+- **Verified Evidence Provenance**: Rejection of unconfirmed findings and cryptographic hash anchoring (`test_evidence_provenance.py`, `test_verified_reporting.py`).
+- **Differential Snapshot Retesting**: Historical immutability, regression detection, and counter-evidence validation (`test_differential_snapshot_comparison.py`).
+- **Defensive Harness & Remediation**: Sensitive data redaction and sanitized advisory generation (`test_defensive_harness_remediation.py`).
+- **Execution & Scope Guards**: Dry-run enforcement and strict boundary validation (`test_attack_dry_run.py`, `test_scope_checker.py`).
+
+---
+
+## Project Structure
+
+```text
+Agentic-Hunter/
+├── bughunter/                   # Standalone Python CLI & Core Engine
+│   ├── core/                    # Session manager, engine, config, and audit log
+│   ├── harness/                 # Remediation advisor, evidence store, and reporter
+│   ├── memory/                  # Pattern DB, schema validation, and log rotation
+│   ├── phases/                  # p01_recon to p10_retesting pipeline phases
+│   └── tools/                   # Shell and Python security tools catalogue
+├── commands/                    # Slash command definitions for interactive agents
+├── skills/                      # 14 specialized bug bounty domain skills
+├── rules/                       # Hunting discipline and report quality rules
+├── docs/                        # Architecture status, design records, and checkpoints
+├── tests/                       # Complete pytest suite (1,227 tests)
+├── assets/                      # Visual branding and banner graphic
+├── install.sh                   # Multi-harness installer script
+└── pyproject.toml               # Python package configuration and dependencies
+```
+
+---
+
+## Disclaimer
+
+This software is designed exclusively for authorized penetration testing, vulnerability research, and security evaluations within explicitly approved bug bounty program scopes. The developers and contributors assume no liability for misuse or unauthorized activities. Always obtain proper authorization before testing any network, service, or system.
+
+---
+
+<p align="center">
+  <b>Agentic Hunter</b> · Maintained by <a href="https://github.com/ArrafiNurHafiz">Arrafi Nur Hafiz</a><br/>
+  <sub>Licensed under the <a href="LICENSE">MIT License</a>. Built for authorized ethical security research.</sub>
+</p>
