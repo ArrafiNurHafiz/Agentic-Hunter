@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from bughunter.harness.remediation import get_remediation_advice
+
 try:
     from memory.redaction import redact_obj
 except ImportError:
@@ -99,8 +101,7 @@ class HarnessReportGenerator:
                     f"3. Verified with confidence score: `{f.get('confidence', 1.0)}`.",
                     "",
                     "#### Remediation Guidance",
-                    f"- Implement strict input validation and access controls on `{endpoint}`.",
-                    "- Ensure least privilege principle is applied.",
+                    get_remediation_advice(brain=None, finding=f),
                     "",
                 ])
 

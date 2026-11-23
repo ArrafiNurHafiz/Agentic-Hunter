@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 from bughunter.core.session import SessionManager
 from bughunter.core.scope import ContinuousScope
+from bughunter.memory.evidence import EvidenceStore
 from bughunter.harness.orchestrator import HarnessOrchestrator
 from bughunter import __main__
 
@@ -87,6 +88,8 @@ def test_cli_retest_subcommand(monkeypatch, tmp_path, capsys):
     sess_id = state["session_id"]
     state["findings"] = [{"finding_id": "f1", "title": "Bypass", "status": "CONFIRMED"}]
     sm.save(state)
+    store = EvidenceStore(sm.path(sess_id) / "evidence")
+    store.capture(kind="validation", finding_id="f1", status="RESOLVED", observation="Remediation verified")
 
     monkeypatch.setattr("sys.argv", ["bughunter", "retest", sess_id, "--dry-run"])
     __main__.main()
