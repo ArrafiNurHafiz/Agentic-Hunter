@@ -8,7 +8,7 @@ from bughunter.core.state_machine import new_phases
 
 def register(subparsers):
     parser = subparsers.add_parser('attack', help='Validate assessment plans and inspect sessions')
-    parser.add_argument('target', help='Target, or resume/status followed by a session ID')
+    parser.add_argument('target', help='Target, or resume/status/retest followed by a session ID')
     parser.add_argument('session_id', nargs='?')
     parser.add_argument('--scope', help='Authorization scope YAML')
     parser.add_argument('--dry-run', action='store_true', help='Validate target and scope without network access')
@@ -27,49 +27,14 @@ def run(args):
             if not args.session_id:
                 raise ValueError('usage: bughunter attack retest <session_id>')
             manager = SessionManager()
-            state = manager.load(args.session_id)
-            from bughunter.harness.orchestrator import HarnessOrchestrator
-            orch = HarnessOrchestrator(
-                session_id=args.session_id,
-                target=state['target'],
-                session_manager=manager,
-                dry_run=args.dry_run,
-            )
-            result = orch.retest()
-        elif args.target == 'resume':
-            if not args.session_id:
-                raise ValueError('usage: bughunter attack resume <session_id>')
-            manager = SessionManager()
-            state = manager.load(args.session_id)
-            from bughunter.harness.orchestrator import HarnessOrchestrator
-            orch = HarnessOrchestrator(
-                session_id=args.session_id,
-                target=state['target'],
-                session_manager=manager,
-                dry_run=args.dry_run,
-            )
-            result = orch.run()
+            from bughunter.phases.p10_retesting import retest_session
+            result = retest_session(args.session_id, manager=manager)
+        elif args.target == 'resume' or not args.dry_run:
+            raise ValueError('assessment execution is unavailable; use --dry-run to validate a plan')
         elif args.session_id:
             raise ValueError('unexpected second argument after target')
-        elif args.dry_run:
-            result = _plan(args)
         else:
-            manager = SessionManager()
-            state = manager.create(args.target)
-            from bughunter.harness.orchestrator import HarnessOrchestrator
-            from bughunter.phases.p01_scope import check_target, load_scope
-            scope = load_scope(args.scope) if args.scope is not None else None
-            check_target(args.target, scope)
-            orch = HarnessOrchestrator(
-                session_id=state['session_id'],
-                target=args.target,
-                scope=scope,
-                profile=args.profile,
-                phase_filter=args.phase,
-                session_manager=manager,
-                dry_run=False,
-            )
-            result = orch.run()
+            result = _plan(args)
     except (ValueError, OSError) as error:
         raise SystemExit(f'attack: {error}') from None
     print(json.dumps(result, indent=2))

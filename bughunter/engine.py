@@ -872,17 +872,10 @@ def cmd_retest(args):
     if not session_id:
         raise SystemExit("retest: session_id is required")
     from bughunter.core.session import SessionManager
-    from bughunter.harness.orchestrator import HarnessOrchestrator
+    from bughunter.phases.p10_retesting import retest_session
     try:
         manager = SessionManager()
-        state = manager.load(session_id)
-        orch = HarnessOrchestrator(
-            session_id=session_id,
-            target=state["target"],
-            session_manager=manager,
-            dry_run=getattr(args, "dry_run", False),
-        )
-        res = orch.retest()
+        res = retest_session(session_id, manager=manager)
         print(json.dumps(res, indent=2))
     except Exception as e:
         raise SystemExit(f"retest error: {e}")
