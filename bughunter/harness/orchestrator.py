@@ -298,41 +298,7 @@ class HarnessOrchestrator:
 
     def retest(self) -> Dict[str, Any]:
         """Perform differential retesting of existing session findings."""
-        state = self.session_manager.load(self.session_id)
-        findings = state.get("findings", [])
-        retest_results = {
-            "session_id": self.session_id,
-            "target": self.target,
-            "retested_at": datetime.now(timezone.utc).isoformat(),
-            "fixed": [],
-            "still_present": [],
-            "regressions": [],
-        }
-
-        for f in findings:
-            # Evaluate whether the finding still reproduces
-            endpoint = f.get("endpoint", "")
-            # If finding was confirmed before, run verification check
-            is_confirmed_before = f.get("status") == "CONFIRMED"
-            # In retest, test whether anomaly persists
-            if self.dry_run or not is_confirmed_before:
-                retest_results["fixed"].append({
-                    "finding_id": f.get("finding_id"),
-                    "title": f.get("title"),
-                    "status": "Fixed",
-                })
-            else:
-                retest_results["still_present"].append({
-                    "finding_id": f.get("finding_id"),
-                    "title": f.get("title"),
-                    "status": "Still Present",
-                })
-
-        # Save retest report
-        retest_path = self.session_manager.path(self.session_id) / "reports" / "retest_report.json"
-        retest_path.parent.mkdir(parents=True, exist_ok=True)
-        retest_path.write_text(json.dumps(retest_results, indent=2))
-
-        # Update phase 10 in state
+        from bughunter.phases.p10_retesting import retest_session
+        retest_results = retest_session(self.session_id, manager=self.session_manager)
         self.checkpoint.update_phase(self.session_id, 10, PhaseStatus.COMPLETED.value)
         return retest_results

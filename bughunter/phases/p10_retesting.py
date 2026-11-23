@@ -206,6 +206,7 @@ def retest_session(session_id: str, manager: Optional[SessionManager] = None) ->
         "regressions": regressions,
         "inconclusive": inconclusive,
     })
+    result["session_id"] = session_id
 
     reports_dir = session_dir / "reports"
     reports_dir.mkdir(exist_ok=True)
