@@ -57,3 +57,5 @@ build/
 
 .git_backup_awarexone/
 .pytest_cache/
+
+tests/test_session_artifacts_integrity.py
