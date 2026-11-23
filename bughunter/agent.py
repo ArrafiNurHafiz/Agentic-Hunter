@@ -131,13 +131,16 @@ class _OpenAIToolClient:
         r = self.session.post(f"{self.base_url}/chat/completions", json=payload, timeout=timeout)
         r.raise_for_status()
         raw_text = getattr(r, "text", "")
-        if raw_text:
+        try:
+            from bughunter.brain import _parse_openai_compat_response
+        except ImportError:
+            from brain import _parse_openai_compat_response
+        data = _parse_openai_compat_response(raw_text)
+        if not data and hasattr(r, "json"):
             try:
-                data = json.loads(raw_text)
-            except json.JSONDecodeError:
-                data, _ = json.JSONDecoder().raw_decode(raw_text)
-        else:
-            data = r.json()
+                data = r.json()
+            except Exception:
+                data = {}
         choices = data.get("choices", [])
         if not choices:
             return {"message": {}}

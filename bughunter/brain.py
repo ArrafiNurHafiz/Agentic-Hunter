@@ -165,6 +165,98 @@ if _ollama_lib is None:
 
     _ollama_lib = _OllamaHTTPModule()
 
+
+def _parse_openai_compat_response(raw_text: str) -> dict:
+    """Robust parser for OpenAI-compatible and 9Router chat completion responses.
+
+    Handles standard JSON, trailing 'data: [DONE]', SSE streaming lines,
+    truncated buffers, and empty responses safely without unhandled exceptions.
+    """
+    if not raw_text or not raw_text.strip():
+        return {}
+
+    text = raw_text.strip()
+    import json as _json
+
+    # 1. Direct JSON decode (clean standard responses)
+    try:
+        data = _json.loads(text)
+        if isinstance(data, dict):
+            return data
+    except _json.JSONDecodeError:
+        pass
+
+    # 2. Check for trailing data: [DONE] or text after valid JSON
+    clean_text = text
+    if clean_text.endswith("data: [DONE]"):
+        clean_text = clean_text[:-len("data: [DONE]")].strip()
+        try:
+            data = _json.loads(clean_text)
+            if isinstance(data, dict):
+                return data
+        except Exception:
+            pass
+
+    try:
+        data, _ = _json.JSONDecoder().raw_decode(text)
+        if isinstance(data, dict):
+            return data
+    except Exception:
+        pass
+
+    # 3. Handle SSE / streaming format (data: ...)
+    if text.startswith("data:") or "\ndata:" in text:
+        content_parts = []
+        last_obj = {}
+        for line in text.splitlines():
+            line = line.strip()
+            if not line.startswith("data:"):
+                continue
+            payload = line[5:].strip()
+            if not payload or payload == "[DONE]":
+                continue
+            try:
+                chunk = _json.loads(payload)
+                if isinstance(chunk, dict):
+                    last_obj = chunk
+                    choices = chunk.get("choices")
+                    if isinstance(choices, list) and choices:
+                        c0 = choices[0]
+                        if isinstance(c0, dict):
+                            delta = c0.get("delta") if isinstance(c0.get("delta"), dict) else {}
+                            msg = c0.get("message") if isinstance(c0.get("message"), dict) else {}
+                            part = delta.get("content") or delta.get("reasoning_content") or delta.get("reasoning") or msg.get("content") or msg.get("reasoning_content") or msg.get("reasoning") or ""
+                            if part:
+                                content_parts.append(str(part))
+            except Exception:
+                pass
+        if content_parts:
+            return {"choices": [{"message": {"content": "".join(content_parts)}}]}
+        if last_obj:
+            choices = last_obj.get("choices")
+            if isinstance(choices, list) and choices:
+                c0 = choices[0]
+                if isinstance(c0, dict) and "message" not in c0 and "delta" in c0:
+                    delta = c0.get("delta") or {}
+                    last_obj["choices"][0]["message"] = {
+                        "content": delta.get("content") or delta.get("reasoning_content") or delta.get("reasoning") or ""
+                    }
+            return last_obj
+
+    # 4. Fallback: search for top-level JSON object
+    import re as _re
+    match = _re.search(r"\{.*\}", text, _re.DOTALL)
+    if match:
+        try:
+            data = _json.loads(match.group(0))
+            if isinstance(data, dict):
+                return data
+        except Exception:
+            pass
+
+    return {}
+
+
 # ── Multi-provider LLM client ──────────────────────────────────────────────────
 # Wraps Ollama, Claude, OpenAI, Grok behind a single .chat() interface.
 
@@ -772,18 +864,32 @@ class LLMClient:
             )
         r.raise_for_status()
         raw_text = getattr(r, "text", "")
-        if raw_text:
+        resp_data = _parse_openai_compat_response(raw_text)
+        if not resp_data and hasattr(r, "json"):
             try:
-                resp_data = _json.loads(raw_text)
-            except _json.JSONDecodeError:
-                resp_data, _ = _json.JSONDecoder().raw_decode(raw_text)
-        else:
-            resp_data = r.json()
-        choice_msg = resp_data["choices"][0].get("message", {})
-        content = choice_msg.get("content") or ""
-        if not content:
-            content = choice_msg.get("reasoning_content") or choice_msg.get("reasoning") or ""
-        return str(content).strip()
+                resp_data = r.json()
+            except Exception:
+                resp_data = {}
+
+        if not isinstance(resp_data, dict):
+            return ""
+
+        choices = resp_data.get("choices")
+        if isinstance(choices, list) and choices:
+            c0 = choices[0]
+            if isinstance(c0, dict):
+                choice_msg = c0.get("message", {})
+                content = choice_msg.get("content") or ""
+                if not content:
+                    content = choice_msg.get("reasoning_content") or choice_msg.get("reasoning") or ""
+                return str(content).strip()
+        elif "error" in resp_data:
+            err = resp_data["error"]
+            err_msg = err.get("message", str(err)) if isinstance(err, dict) else str(err)
+            print(f"{YELLOW}[Brain/{self.provider}] API error: {err_msg}{NC}", file=sys.stderr)
+            return ""
+
+        return ""
 
     def list_models(self) -> list[str]:
         """List available models for the current provider."""
