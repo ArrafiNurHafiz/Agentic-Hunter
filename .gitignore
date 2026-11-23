@@ -59,3 +59,4 @@ build/
 .pytest_cache/
 
 tests/test_session_artifacts_integrity.py
+tests/test_verified_reporting.py
