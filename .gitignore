@@ -60,3 +60,4 @@ build/
 
 tests/test_session_artifacts_integrity.py
 tests/test_verified_reporting.py
+tests/test_differential_snapshot_comparison.py
