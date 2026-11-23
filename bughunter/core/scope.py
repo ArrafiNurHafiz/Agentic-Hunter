@@ -70,7 +70,11 @@ class ContinuousScope:
             return ScopeDecision.BLOCK_UNSAFE_METHOD
         try:
             parsed = urlsplit(url)
-            port = parsed.port or {'http': 80, 'https': 443}.get(parsed.scheme)
+            if parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username is not None or parsed.password is not None:
+                return ScopeDecision.BLOCK_OUT_OF_SCOPE
+            port = parsed.port
+            if port is None:
+                port = {'http': 80, 'https': 443}[parsed.scheme]
             if not port or (self.ports and port not in self.ports) or not self.checker.is_in_scope(url):
                 return ScopeDecision.BLOCK_OUT_OF_SCOPE
         except ValueError:
