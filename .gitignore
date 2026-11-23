@@ -58,6 +58,4 @@ build/
 .git_backup_awarexone/
 .pytest_cache/
 
-tests/test_verified_reporting.py
-tests/test_differential_snapshot_comparison.py
 tests/test_defensive_harness_remediation.py
